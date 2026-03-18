@@ -1,5 +1,7 @@
 import Fastify from 'fastify';
 import pc from 'picocolors';
+import { config } from './config/env.js';
+import rootRoutes from './routes/root.routes.js';
 
 const fastify = Fastify({
     logger: {
@@ -27,21 +29,15 @@ const printBanner = () => {
     console.log(banner);
 };
 
-// Declare a route
-fastify.get('/', async (request, reply) => {
-    return {
-        status: 'online',
-        message: 'Welcome to the Fantasy Fastify App!',
-        timestamp: new Date().toISOString()
-    };
-});
+// Register routes
+fastify.register(rootRoutes);
 
 // Run the server!
 const start = async () => {
     try {
         printBanner();
-        await fastify.listen({ port: 3000, host: '0.0.0.0' });
-        console.log(`\n  ${pc.green('✔')} ${pc.bold('Server is screaming at:')} ${pc.yellow('http://localhost:3000')}\n`);
+        await fastify.listen({ port: config.PORT, host: '0.0.0.0' });
+        console.log(`\n  ${pc.green('✔')} ${pc.bold('Server is screaming at:')} ${pc.yellow(`http://localhost:${config.PORT}`)}\n`);
     } catch (err) {
         fastify.log.error(err);
         process.exit(1);

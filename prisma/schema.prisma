@@ -1,0 +1,23 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+// Example model
+model User {
+  id    Int     @id @default(autoincrement())
+  email String  @unique
+  name  String?
+}
+
+model ApiLogger {
+  id        Int      @id @default(autoincrement())
+  message   String
+  level     String   @default("info")
+  timestamp DateTime @default(now())
+}
