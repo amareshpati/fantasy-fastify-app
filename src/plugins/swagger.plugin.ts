@@ -2,8 +2,12 @@ import fp from 'fastify-plugin';
 import swagger from '@fastify/swagger';
 import swaggerUi from '@fastify/swagger-ui';
 import type { FastifyInstance } from 'fastify';
+import { config } from '../config/env.js';
 
 export default fp(async (fastify: FastifyInstance) => {
+
+    if (!config.isDevelopment) return
+
     // Register Swagger (OpenAPI configuration)
     await fastify.register(swagger, {
         openapi: {
