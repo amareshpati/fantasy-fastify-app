@@ -1,78 +1,52 @@
+import { z } from 'zod';
+
 export const registerSchema = {
     tags: ['Auth'],
     description: 'Register a new user account',
-    body: {
-        type: 'object',
-        required: ['email', 'password'],
-        properties: {
-            email: { type: 'string', format: 'email', example: 'user@example.com' },
-            name: { type: 'string', minLength: 2, example: 'John Doe' },
-            password: { type: 'string', minLength: 6, example: 'secureP@ss123' },
-        },
-    },
+    body: z.object({
+        email: z.string().email().describe('user@example.com'),
+        name: z.string().min(2).optional().describe('John Doe'),
+        password: z.string().min(6).describe('secureP@ss123'),
+    }),
     response: {
-        201: {
-            type: 'object',
-            properties: {
-                message: { type: 'string' },
-                token: { type: 'string' },
-                user: {
-                    type: 'object',
-                    properties: {
-                        id: { type: 'number' },
-                        email: { type: 'string' },
-                        name: { type: 'string', nullable: true },
-                    },
-                },
-            },
-        },
-        409: {
-            type: 'object',
-            properties: {
-                statusCode: { type: 'number' },
-                error: { type: 'string' },
-                message: { type: 'string' },
-            },
-        },
+        201: z.object({
+            message: z.string(),
+            token: z.string(),
+            user: z.object({
+                id: z.number(),
+                email: z.string().email(),
+                name: z.string().nullable().optional(),
+            }),
+        }),
+        409: z.object({
+            statusCode: z.number(),
+            error: z.string(),
+            message: z.string(),
+        }),
     },
 };
 
 export const loginSchema = {
     tags: ['Auth'],
     description: 'Login with email and password',
-    body: {
-        type: 'object',
-        required: ['email', 'password'],
-        properties: {
-            email: { type: 'string', format: 'email', example: 'user@example.com' },
-            password: { type: 'string', example: 'secureP@ss123' },
-        },
-    },
+    body: z.object({
+        email: z.string().email().describe('user@example.com'),
+        password: z.string().describe('secureP@ss123'),
+    }),
     response: {
-        200: {
-            type: 'object',
-            properties: {
-                message: { type: 'string' },
-                token: { type: 'string' },
-                user: {
-                    type: 'object',
-                    properties: {
-                        id: { type: 'number' },
-                        email: { type: 'string' },
-                        name: { type: 'string', nullable: true },
-                    },
-                },
-            },
-        },
-        401: {
-            type: 'object',
-            properties: {
-                statusCode: { type: 'number' },
-                error: { type: 'string' },
-                message: { type: 'string' },
-            },
-        },
+        200: z.object({
+            message: z.string(),
+            token: z.string(),
+            user: z.object({
+                id: z.number(),
+                email: z.string().email(),
+                name: z.string().nullable().optional(),
+            }),
+        }),
+        401: z.object({
+            statusCode: z.number(),
+            error: z.string(),
+            message: z.string(),
+        }),
     },
 };
-
-

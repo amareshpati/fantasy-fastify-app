@@ -1,10 +1,12 @@
-import type { FastifyInstance } from "fastify";
+import type { FastifyPluginAsyncZod } from "fastify-type-provider-zod";
 import { getUserDetailsSchema } from "./user.schema.js";
 import { getUserDetails } from "./user.service.js";
 
-export default async function userRoutes(fastify: FastifyInstance) {
+const userRoutes: FastifyPluginAsyncZod = async (fastify) => {
     fastify.get('/users/user-details', {
         schema: getUserDetailsSchema,
         preHandler: [fastify.authenticate],
     }, getUserDetails);
 }
+
+export default userRoutes;

@@ -20,7 +20,10 @@ export const getUserDetails = async (request: FastifyRequest, reply: FastifyRepl
             });
         }
 
-        return user;
+        return {
+            ...user,
+            createdAt: user.createdAt.toISOString(),
+        };
     } catch (error) {
         request.log.error(error);
         return reply.status(500).send({ error: 'Failed to fetch user profile' });
