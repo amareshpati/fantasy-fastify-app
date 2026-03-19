@@ -1,20 +1,7 @@
-import Fastify from 'fastify';
 import pc from 'picocolors';
 import { config } from './config/env.js';
-import rootRoutes from './routes/root.routes.js';
+import { buildConfigs } from './app.js';
 
-const fastify = Fastify({
-    logger: {
-        transport: {
-            target: 'pino-pretty',
-            options: {
-                colorize: true,
-                translateTime: 'SYS:HH:MM:ss',
-                ignore: 'pid,hostname',
-            },
-        },
-    },
-});
 
 // Cool Startup Banner
 const printBanner = () => {
@@ -29,19 +16,40 @@ const printBanner = () => {
     console.log(banner);
 };
 
-// Register routes
-fastify.register(rootRoutes);
+const init = async () => {
+    const app = await buildConfigs();
 
-// Run the server!
-const start = async () => {
+    // will active these later
+
+    /* 
+    await server(fastify);
+ 
+    // Graceful shutdown: close DB connection when the server shuts down
+    fastify.addHook('onClose', async (instance) => {
+        instance.log.info('Closing database connection…');
+        await closeDbConnection();
+    });
+ 
+    // Handle termination signals for graceful shutdown
+    const shutDown = async (signal: string) => {
+        fastify.log.info(`Received ${signal}, shutting down gracefully…`);
+        await fastify.close();
+        process.exit(0);
+    };
+    process.on('SIGTERM', () => shutDown('SIGTERM'));
+    process.on('SIGINT', () => shutDown('SIGINT'));
+    */
+
+
+    // Run the server!
     try {
         printBanner();
-        await fastify.listen({ port: config.PORT, host: config.HOST });
+        await app.listen({ port: config.PORT, host: config.HOST });
         console.log(`\n  ${pc.green('✔')} ${pc.bold('Server is screaming at:')} ${pc.yellow(`http://localhost:${config.PORT}`)}\n`);
     } catch (err) {
-        fastify.log.error(err);
+        app.log.error(err);
         process.exit(1);
     }
-};
+}
 
-start();
+init();

@@ -1,6 +1,6 @@
 import type { FastifyReply, FastifyRequest } from 'fastify';
-import prisma from '../lib/prisma.js';
-import { config } from '../config/env.js';
+import prisma from '../../shared/db/prisma.js';
+import { config } from '../../config/env.js';
 
 export const getHealth = async (request: FastifyRequest, reply: FastifyReply) => {
     try {
@@ -30,4 +30,13 @@ export const getHealth = async (request: FastifyRequest, reply: FastifyReply) =>
             error: config.NODE_ENV === 'development' ? error.message : undefined
         });
     }
+};
+
+export const getRoot = async (request: FastifyRequest, reply: FastifyReply) => {
+    return {
+        status: 'online',
+        message: 'Welcome to the Fantasy Fastify App!',
+        timestamp: new Date().toISOString(),
+        env: config.NODE_ENV
+    };
 };

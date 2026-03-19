@@ -1,5 +1,5 @@
 import type { FastifyReply, FastifyRequest } from 'fastify';
-import prisma from '../lib/prisma.js';
+import prisma from '../../shared/db/prisma.js';
 
 export const getUsers = async (request: FastifyRequest, reply: FastifyReply) => {
     try {
