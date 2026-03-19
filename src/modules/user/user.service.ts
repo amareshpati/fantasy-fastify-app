@@ -1,25 +1,29 @@
 import type { FastifyReply, FastifyRequest } from 'fastify';
 import prisma from '../../shared/db/prisma.js';
 
-export const getUsers = async (request: FastifyRequest, reply: FastifyReply) => {
-    try {
-        const users = await prisma.user.findMany();
-        return users;
-    } catch (error) {
-        request.log.error(error);
-        return reply.status(500).send({ error: 'Database connection failed' });
-    }
-};
 
-export const createUser = async (request: FastifyRequest, reply: FastifyReply) => {
-    const { email, name } = request.body as { email: string; name: string };
+
+export const getUserDetails = async (request: FastifyRequest, reply: FastifyReply) => {
     try {
-        const user = await prisma.user.create({
-            data: { email, name },
+        const { id } = request.user;
+
+        const user = await prisma.user.findUnique({
+            where: { id },
+            select: { id: true, email: true, name: true, createdAt: true },
         });
+
+        if (!user) {
+            return reply.status(404).send({
+                statusCode: 404,
+                error: 'Not Found',
+                message: 'User not found',
+            });
+        }
+
         return user;
     } catch (error) {
         request.log.error(error);
-        return reply.status(500).send({ error: 'Could not create user' });
+        return reply.status(500).send({ error: 'Failed to fetch user profile' });
     }
 };
+

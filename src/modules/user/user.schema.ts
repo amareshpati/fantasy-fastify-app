@@ -1,38 +1,27 @@
-export const createUserSchema = {
-    body: {
-        type: 'object',
-        required: ['email', 'name'],
-        properties: {
-            email: { type: 'string', format: 'email' },
-            name: { type: 'string', minLength: 2 }
-        }
-    },
-    response: {
-        201: {
-            type: 'object',
-            properties: {
-                id: { type: 'string' },
-                email: { type: 'string' },
-                name: { type: 'string' },
-                createdAt: { type: 'string', format: 'date-time' }
-            }
-        }
-    }
-};
 
-export const getUsersSchema = {
+
+export const getUserDetailsSchema = {
+    tags: ['Users'],
+    description: 'Get user details',
+    security: [{ bearerAuth: [] }],
     response: {
         200: {
-            type: 'array',
-            items: {
-                type: 'object',
-                properties: {
-                    id: { type: 'string' },
-                    email: { type: 'string' },
-                    name: { type: 'string' },
-                    createdAt: { type: 'string', format: 'date-time' }
-                }
-            }
-        }
-    }
+            type: 'object',
+            properties: {
+                id: { type: 'number' },
+                email: { type: 'string' },
+                name: { type: 'string', nullable: true },
+                createdAt: { type: 'string', format: 'date-time' },
+            },
+        },
+        401: {
+            type: 'object',
+            properties: {
+                statusCode: { type: 'number' },
+                error: { type: 'string' },
+                message: { type: 'string' },
+            },
+        },
+    },
 };
+
