@@ -1,6 +1,7 @@
 import Fastify from 'fastify';
 import { config } from './config/env.js';
 import { randomUUID } from 'node:crypto';
+import swaggerPlugin from './plugins/swagger.plugin.js';
 import userRoutes from './modules/user/user.routes.js';
 import healthRoutes from './modules/health/health.routes.js';
 
@@ -40,11 +41,12 @@ export const buildConfigs = async () => {
         },
     });
 
+    // Register plugins
+    await fastify.register(swaggerPlugin);
 
     // Register routes
-
-    fastify.register(healthRoutes, { prefix: '/' });
-    fastify.register(userRoutes, { prefix: '/api' });
+    await fastify.register(healthRoutes, { prefix: '/' });
+    await fastify.register(userRoutes, { prefix: '/api' });
 
     return fastify;
 }
