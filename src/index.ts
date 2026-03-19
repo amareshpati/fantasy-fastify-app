@@ -19,12 +19,12 @@ const fastify = Fastify({
 // Cool Startup Banner
 const printBanner = () => {
     const banner = `
-  ${pc.cyan('╔══════════════════════════════════════════════════════════════════════════════╗')}
-  ${pc.cyan('║')}                                                                              ${pc.cyan('║')}
-  ${pc.cyan('║')}    ${pc.bold(pc.magenta('🚀 FANTASY FASTIFY APP'))}                                                    ${pc.cyan('║')}
-  ${pc.cyan('║')}    ${pc.dim('The ultimate high-performance backend')}                                     ${pc.cyan('║')}
-  ${pc.cyan('║')}                                                                              ${pc.cyan('║')}
-  ${pc.cyan('╚══════════════════════════════════════════════════════════════════════════════╝')}
+  ${pc.cyan('╔══════════════════════════════════════════════╗')}
+  ${pc.cyan('║')}                                              ${pc.cyan('║')}
+  ${pc.cyan('║')}    ${pc.bold(pc.magenta('🚀 FANTASY FASTIFY APP -- ' + config.NODE_ENV))}     ${pc.cyan('║')}
+  ${pc.cyan('║')}    ${pc.dim('The ultimate high-performance backend')}     ${pc.cyan('║')}
+  ${pc.cyan('║')}                                              ${pc.cyan('║')}
+  ${pc.cyan('╚══════════════════════════════════════════════╝')}
   `;
     console.log(banner);
 };
@@ -36,7 +36,7 @@ fastify.register(rootRoutes);
 const start = async () => {
     try {
         printBanner();
-        await fastify.listen({ port: config.PORT, host: '0.0.0.0' });
+        await fastify.listen({ port: config.PORT, host: config.HOST });
         console.log(`\n  ${pc.green('✔')} ${pc.bold('Server is screaming at:')} ${pc.yellow(`http://localhost:${config.PORT}`)}\n`);
     } catch (err) {
         fastify.log.error(err);
