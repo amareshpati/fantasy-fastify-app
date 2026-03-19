@@ -1,17 +1,11 @@
 import type { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify';
+import type { z } from 'zod';
 import prisma from '../../shared/db/prisma.js';
 import { hashPassword, verifyPassword } from '../../shared/utils/password.js';
+import type { registerSchema, loginSchema } from './auth.schema.js';
 
-interface RegisterBody {
-    email: string;
-    name?: string;
-    password: string;
-}
-
-interface LoginBody {
-    email: string;
-    password: string;
-}
+type RegisterBody = z.infer<typeof registerSchema.body>;
+type LoginBody = z.infer<typeof loginSchema.body>;
 
 export const register = (fastify: FastifyInstance) =>
     async (request: FastifyRequest, reply: FastifyReply) => {

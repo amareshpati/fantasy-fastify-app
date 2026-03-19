@@ -1,8 +1,8 @@
-import type { FastifyInstance } from 'fastify';
+import type { FastifyPluginAsyncZod } from 'fastify-type-provider-zod';
 import { registerSchema, loginSchema } from './auth.schema.js';
 import { register, login } from './auth.service.js';
 
-export default async function authRoutes(fastify: FastifyInstance) {
+const authRoutes: FastifyPluginAsyncZod = async (fastify) => {
     fastify.post('/auth/register', {
         schema: registerSchema,
     }, register(fastify));
@@ -11,3 +11,5 @@ export default async function authRoutes(fastify: FastifyInstance) {
         schema: loginSchema,
     }, login(fastify));
 }
+
+export default authRoutes;

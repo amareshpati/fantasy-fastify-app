@@ -1,6 +1,7 @@
 import fp from 'fastify-plugin';
 import swagger from '@fastify/swagger';
 import swaggerUi from '@fastify/swagger-ui';
+import { jsonSchemaTransform } from 'fastify-type-provider-zod';
 import type { FastifyInstance } from 'fastify';
 import { config } from '../config/env.js';
 
@@ -26,6 +27,7 @@ export default fp(async (fastify: FastifyInstance) => {
                 },
             },
         },
+        transform: jsonSchemaTransform,
     });
 
     // Register Swagger UI

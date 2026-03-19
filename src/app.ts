@@ -6,6 +6,7 @@ import jwtPlugin from './plugins/jwt.plugin.js';
 import userRoutes from './modules/user/user.routes.js';
 import healthRoutes from './modules/health/health.routes.js';
 import authRoutes from './modules/auth/auth.routes.js';
+import { serializerCompiler, validatorCompiler, type ZodTypeProvider } from 'fastify-type-provider-zod';
 
 export const buildConfigs = async () => {
     const fastify = Fastify({
@@ -41,7 +42,10 @@ export const buildConfigs = async () => {
                 keywords: ['example'],
             },
         },
-    });
+    }).withTypeProvider<ZodTypeProvider>();
+
+    fastify.setValidatorCompiler(validatorCompiler);
+    fastify.setSerializerCompiler(serializerCompiler);
 
     // Register plugins
     await fastify.register(swaggerPlugin);

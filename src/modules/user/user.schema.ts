@@ -1,27 +1,20 @@
-
+import { z } from 'zod';
 
 export const getUserDetailsSchema = {
     tags: ['Users'],
     description: 'Get user details',
     security: [{ bearerAuth: [] }],
     response: {
-        200: {
-            type: 'object',
-            properties: {
-                id: { type: 'number' },
-                email: { type: 'string' },
-                name: { type: 'string', nullable: true },
-                createdAt: { type: 'string', format: 'date-time' },
-            },
-        },
-        401: {
-            type: 'object',
-            properties: {
-                statusCode: { type: 'number' },
-                error: { type: 'string' },
-                message: { type: 'string' },
-            },
-        },
+        200: z.object({
+            id: z.number(),
+            email: z.string().email(),
+            name: z.string().nullable().optional(),
+            createdAt: z.string().datetime().optional(), // Prisma sometimes returns Date objects, Fastify serializes to ISO string
+        }),
+        401: z.object({
+            statusCode: z.number(),
+            error: z.string(),
+            message: z.string(),
+        }),
     },
 };
-
