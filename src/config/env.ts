@@ -24,8 +24,13 @@ export const config = {
     DATABASE_URL: process.env.DATABASE_URL as string,
     DIRECT_URL: process.env.DIRECT_URL as string,
     LOG_LEVEL: process.env.LOG_LEVEL || LOG_LEVELS.development,
+    JWT_SECRET: process.env.JWT_SECRET as string,
 };
 
 if (!config.DATABASE_URL) {
     console.warn('⚠️ DATABASE_URL is not set in environment variables');
+}
+
+if (!config.JWT_SECRET) {
+    console.warn('⚠️ JWT_SECRET is not set in environment variables');
 }

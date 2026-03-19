@@ -2,8 +2,10 @@ import Fastify from 'fastify';
 import { config } from './config/env.js';
 import { randomUUID } from 'node:crypto';
 import swaggerPlugin from './plugins/swagger.plugin.js';
+import jwtPlugin from './plugins/jwt.plugin.js';
 import userRoutes from './modules/user/user.routes.js';
 import healthRoutes from './modules/health/health.routes.js';
+import authRoutes from './modules/auth/auth.routes.js';
 
 export const buildConfigs = async () => {
     const fastify = Fastify({
@@ -43,10 +45,12 @@ export const buildConfigs = async () => {
 
     // Register plugins
     await fastify.register(swaggerPlugin);
+    await fastify.register(jwtPlugin);
 
     // Register routes
     await fastify.register(healthRoutes, { prefix: '/' });
     await fastify.register(userRoutes, { prefix: '/api' });
+    await fastify.register(authRoutes, { prefix: '/api' });
 
     return fastify;
-}
+}
